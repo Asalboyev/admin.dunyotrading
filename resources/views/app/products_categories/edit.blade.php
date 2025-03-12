@@ -156,12 +156,40 @@
                                             </span>
                                             @enderror
                                         </div>
+
+                                        <div class="form-group">
+                                            <label for="desc" class="form-label">Первый</label>
+                                            <textarea  id="desc" cols="30" rows="10" class="form-control @error('desc.'.$lang->code) is-invalid @enderror ckeditor" name="first[{{ $lang->code }}]" placeholder="Первый...">{{ old('first.'.$lang->code) ?? $productsCategory->first[$lang->code] ?? null  }}</textarea>
+                                            @error('desc.'.$lang->code)
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                            @enderror
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="desc" class="form-label">Второй</label>
+                                            <textarea name="second[{{ $lang->code }}]" id="desc" cols="30" rows="10" class="form-control @error('desc.'.$lang->code) is-invalid @enderror ckeditor" name="second[{{ $lang->code }}]" placeholder="Второй...">{{ old('second.'.$lang->code) ?? $productsCategory->second[$lang->code] ?? null  }}</textarea>
+                                            @error('second.'.$lang->code)
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                            @enderror
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="desc" class="form-label">Третий</label>
+                                            <textarea name="third[{{ $lang->code }}]" id="desc" cols="30" rows="10" class="form-control @error('third.'.$lang->code) is-invalid @enderror ckeditor" name="third[{{ $lang->code }}]" placeholder="Третий...">{{ old('third.'.$lang->code) ?? $productsCategory->third[$lang->code] ?? null  }}</textarea>
+                                            @error('third.'.$lang->code)
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                            @enderror
+                                        </div>
                                     </div>
                                     @endforeach
                                 </div>
                                 <div class="form-group">
                                     <label for="parent_id" class="form-label">Родительская категория</label>
-                                    <select class="form-select @error('parent_id') is-invalid @enderror" id="parent_id" name="parent_id">
+                                    <select class="form-select @error('parent_id') is-invalid @enderror" id="parent_id" name="parent_id" data-choices='{"hiddne": true}'>
                                         <option value="">Главная категория</option>
                                         @foreach ($all_categories as $key => $item)
                                         <option value="{{ $item->id }}" {{ old('parent_id') ?? $productsCategory->parent_id == $item->id ? 'selected' : '' }}>{{ $item->title[$main_lang->code] }}</option>

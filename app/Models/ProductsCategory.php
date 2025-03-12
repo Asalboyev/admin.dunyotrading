@@ -16,13 +16,19 @@ class   ProductsCategory extends Model
         'desc',
         'in_main',
         'view',
-        'slug'
+        'slug',
+        'first',
+        'second',
+        'third',
 
     ];
 
     protected $casts = [
         'title' => 'array',
-        'desc' => 'array'
+        'desc' => 'array',
+        'first' => 'array',
+        'second' => 'array',
+        'third' => 'array'
     ];
 
     public function products()

@@ -126,23 +126,60 @@
                                             </span>
                                             @enderror
                                         </div>
+
+                                        <div class="form-group">
+                                            <label for="desc" class="form-label">Первый</label>
+                                            <textarea  id="desc" cols="30" rows="10" class="form-control @error('desc.'.$lang->code) is-invalid @enderror ckeditor" name="first[{{ $lang->code }}]" placeholder="Первый...">{{ old('first.'.$lang->code) }}</textarea>
+                                            @error('desc.'.$lang->code)
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                            @enderror
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="desc" class="form-label">Второй</label>
+                                            <textarea name="second[{{ $lang->code }}]" id="desc" cols="30" rows="10" class="form-control @error('desc.'.$lang->code) is-invalid @enderror ckeditor" name="second[{{ $lang->code }}]" placeholder="Второй...">{{ old('second.'.$lang->code) }}</textarea>
+                                            @error('second.'.$lang->code)
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                            @enderror
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="desc" class="form-label">Третий</label>
+                                            <textarea name="third[{{ $lang->code }}]" id="desc" cols="30" rows="10" class="form-control @error('third.'.$lang->code) is-invalid @enderror ckeditor" name="third[{{ $lang->code }}]" placeholder="Третий...">{{ old('third.'.$lang->code) }}</textarea>
+                                            @error('third.'.$lang->code)
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                            @enderror
+                                        </div>
                                     </div>
                                     @endforeach
                                 </div>
                                 <div class="form-group">
                                     <label for="parent_id" class="form-label">Родительская категория</label>
-                                    <select class="form-select @error('parent_id') is-invalid @enderror" id="parent_id" name="parent_id">
+                                    <select class="form-select @error('parent_id') is-invalid @enderror" id="parent_id" name="parent_id" data-choices='{"hiddne": true}'>
                                         <option value="">Главная категория</option>
-                                        @foreach ($all_categories as $key => $item)
-                                        <option value="{{ $item->id }}" {{ old('parent_id') == $item->id ? 'selected' : '' }}>{{ $item->title[$main_lang->code] }}</option>
+                                        @foreach ($all_categories as $category)
+                                            <option value="{{ $category->id }}" class="fw-bold" > {{ $category->title[$main_lang->code] }}</option>
+                                        @if (!$category->parent_id) {{-- Faqat asosiy kategoriyalarni chiqarish 📂--}}
+                                            {{-- Pastdagi fayl ichiga o'tamiz --}}
+                                            @include('app.products_categories.category-options', [
+                                                'categories' => $all_categories,
+                                                'parent_id' => $category->id,
+                                                'level' => 1
+                                            ])
+                                            @endif
                                         @endforeach
                                     </select>
                                     @error('parent_id')
                                     <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
+            <strong>{{ $message }}</strong>
+        </span>
                                     @enderror
                                 </div>
+
                                 <div class="form-group">
                                     <label for="in_main" class="form-label">Показать на первом экране</label>
                                     <select class="form-select @error('in_main') is-invalid @enderror" id="in_main" name="in_main">

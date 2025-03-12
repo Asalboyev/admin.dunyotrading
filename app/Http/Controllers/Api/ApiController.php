@@ -14,6 +14,8 @@ use App\Models\SiteInfo;
 use App\Models\Product;
 use App\Models\Application;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Http;
+
 
 class ApiController extends Controller
 {
@@ -651,28 +653,82 @@ class ApiController extends Controller
             'data' => $translatedSiteInfo,  // Foydalanuvchi tiliga mos kompaniya ma'lumotlari
         ]);
     }
+//    public function store(Request $request)
+//    {
+//        // Requestdagi ma'lumotlarni tekshirish (validatsiya)
+//        $request->validate([
+//            'name' => 'required|string|max:255',
+//            'phone_number' => 'nullable|string|max:20',
+//            'message' => 'required|string',
+//            'product_id' => 'nullable|exists:products,id', // product_id mavjud bo'lsa tekshiradi
+//        ]);
+//
+//        // Ma'lumotni saqlash
+//        $contact = Application::create([
+//            'name' => $request->name,
+//            'phone_number' => $request->phone_number,
+//            'message' => $request->message,
+//            'product_id' => $request->product_id ?? null, // Agar product_id berilmasa null bo'ladi
+//        ]);
+//
+//        // Yangi Application ma'lumotlarini qaytarish
+//        return response()->json([
+//            'message' => 'Contact information saved successfully.',
+//            'data' => $contact,
+//        ], 201);
+//    }
+
+
     public function store(Request $request)
-{
-    // Requestdagi ma'lumotlarni tekshirish (validatsiya)
-    $request->validate([
-        'name' => 'required|string|max:255',
-        'phone_number' => 'nullable|string|max:20',
-        'message' => 'required|string',
-    ]);
+    {
+        // Validatsiya
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'phone_number' => 'nullable|string|max:20',
+            'message' => 'required|string',
+            'product_id' => 'nullable|exists:products,id',
+        ]);
 
-    // Ma'lumotni saqlash
-    $contact = Application::create([
-        'name' => $request->name,
-        'phone_number' => $request->phone_number,
-        'message' => $request->message,
-    ]);
+        // Ma'lumotni saqlash
+        $contact = Application::create([
+            'name' => $request->name,
+            'phone_number' => $request->phone_number,
+            'message' => $request->message,
+            'product_id' => $request->product_id ?? null,
+        ]);
 
-    // Yangi Contact ma'lumotlarini qaytarish
-    return response()->json([
-        'message' => 'Contact information saved successfully.',
-        'data' => $contact,
-    ], 201);
-}
+        // Mahsulot nomini olish
+        $productName = $request->product_id
+            ? Product::find($request->product_id)->title[$this->main_lang->code] ?? "Noma'lum mahsulot"
+            : "Otsiz";
+
+        // Telegram xabari uchun matn tayyorlash
+        $telegramMessage = "🟢 Yangi murojaat:\n\n" .
+            "👤 Ism: {$request->name}\n" .
+            "📞 Telefon: " . ($request->phone_number ?? 'Kiritilmagan') . "\n" .
+            "💬 Xabar: {$request->message}\n" .
+            "📦 Holat: $productName";
+
+        // Telegramga yuborish
+        try {
+            Http::post("https://api.telegram.org/bot" . env('TELEGRAM_BOT_TOKEN') . "/sendMessage", [
+                'chat_id' => env('TELEGRAM_CHAT_ID'),
+                'text' => $telegramMessage,
+            ]);
+
+            $telegramStatus = "Telegram notification sent successfully.";
+        } catch (\Exception $e) {
+            $telegramStatus = "Contact saved, but failed to send Telegram notification.";
+        }
+
+        // Javob qaytarish
+        return response()->json([
+            'message' => 'Contact information saved successfully.',
+            'telegram_status' => $telegramStatus,
+            'data' => $contact,
+        ], 201);
+    }
+
 
 
 //-

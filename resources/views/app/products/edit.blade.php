@@ -154,15 +154,7 @@
                                                 </span>
                                                 @enderror
                                             </div>
-                                            <div class="form-group">
-                                                <label for="info" class="form-label">Xapaктеристика</label>
-                                                <textarea name="info[{{ $lang->code }}]" id="info" cols="30" rows="10" class="form-control @error('info.'.$lang->code) is-invalid @enderror ckeditor" name="info[{{ $lang->code }}]" placeholder="Описание...">{{ old('info.'.$lang->code) ?? $product->info[$lang->code] ?? null }}</textarea>
-                                                @error('info.'.$lang->code)
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                                @enderror
-                                            </div>
+
                                             <div class="form-group">
                                                 <label for="meta_desc" class="form-label">Meta Описание</label>
                                                 <textarea id="meta_desc" cols="4" rows="4" class="form-control @error('meta_desc.'.$lang->code) is-invalid @enderror" name="meta_desc[{{ $lang->code }}]">{{ old('meta_desc.'.$lang->code) ?? $product->meta_desc[$lang->code] ?? null }}</textarea>

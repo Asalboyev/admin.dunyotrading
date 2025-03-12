@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Application extends Model
 {
     use HasFactory;
-// eskini yangilashi uchun uni topish kerak keyin yangilash kerak model qanday tuzilgan 
+// eskini yangilashi uchun uni topish kerak keyin yangilash kerak model qanday tuzilgan
     protected $fillable = [
         'name',
         'email',
@@ -16,6 +16,11 @@ class Application extends Model
         'message',
         'type',
         'page',
-        'company'
+        'company',
+        'product_id'
     ];
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_id');
+    }
 }

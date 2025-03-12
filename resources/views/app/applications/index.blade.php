@@ -45,7 +45,6 @@
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Ф.И.О.</th>
-                            <th scope="col">От компании</th>
                             <th scope="col">Email</th>
                             <th scope="col">Номер телефона</th>
                             <th scope="col">Сообщение</th>
@@ -58,16 +57,11 @@
                         <tr>
                             <th scope="row" style="width: 100px">{{ $applications->firstItem() + $key }}</th>
                             <td>{{ $item->name ?? '--' }}</td>
-                            <td>{{ $item->company ?? '--' }}</td>
                             <td>{{ $item->email ?? '--' }}</td>
                             <td>{{ $item->phone_number ?? '--' }}</td>
                             <td>{{ $item->message ?? '--' }}</td>
-                            <td>
-                                @php
-                                    $product = \App\Models\Product::find($item->page);
-                                @endphp
-                                {{ $product ? $product->title[$main_lang->code] : '--' }}
-                            </td>
+                            <td>{{ $item->product->title['en'] ?? '--' }}</td>
+
                             <td style="width: 200px">
                                 <div class="d-flex justify-content-end">
                                     <!-- <a href="{{ route($route_name.'.edit', [$route_parameter => $item]) }}" class="btn btn-sm btn-info"><i class="fe fe-edit-2"></i></a> -->

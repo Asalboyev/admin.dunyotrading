@@ -20,7 +20,7 @@ class CreateProductsTable extends Migration
             $table->integer('views_count')->default(1);
             $table->string('price')->nullable();
             $table->string('discount_price')->nullable();
-            $table->text('info')->nullable();
+//            $table->text('info')->nullable();
             $table->bigInteger('brand_id')->nullable();
             $table->text('meta_keywords')->nullable();
             $table->text('meta_desc')->nullable();

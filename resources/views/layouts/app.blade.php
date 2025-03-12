@@ -207,16 +207,16 @@
                         </a>
                     </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->is('admin/catalogs') || request()->is('admin/catalogs/*') ? 'active' : '' }}" href="{{ route('catalogs.index') }}">
-                            <i class="fe fe-award"></i> Наши каталоги
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->is('admin/members') || request()->is('admin/members/*') ? 'active' : '' }}" href="{{ route('members.index') }}">
-                            <i class="fe fe-users"></i> Команда
-                        </a>
-                    </li>
+{{--                    <li class="nav-item">--}}
+{{--                        <a class="nav-link {{ request()->is('admin/catalogs') || request()->is('admin/catalogs/*') ? 'active' : '' }}" href="{{ route('catalogs.index') }}">--}}
+{{--                            <i class="fe fe-award"></i> Наши каталоги--}}
+{{--                        </a>--}}
+{{--                    </li>--}}
+{{--                    <li class="nav-item">--}}
+{{--                        <a class="nav-link {{ request()->is('admin/members') || request()->is('admin/members/*') ? 'active' : '' }}" href="{{ route('members.index') }}">--}}
+{{--                            <i class="fe fe-users"></i> Команда--}}
+{{--                        </a>--}}
+{{--                    </li>--}}
 
                     <hr class="navbar-divider my-3">
                     <li class="nav-item">

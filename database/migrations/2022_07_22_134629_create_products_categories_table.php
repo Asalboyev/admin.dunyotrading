@@ -20,7 +20,9 @@ class CreateProductsCategoriesTable extends Migration
             $table->string('img')->nullable();
             $table->bigInteger('parent_id')->nullable();
             $table->text('desc')->nullable();
-
+            $table->text('first')->nullable();
+            $table->text('second')->nullable();
+            $table->text('third')->nullable();
             $table->timestamps();
         });
     }

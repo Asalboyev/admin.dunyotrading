@@ -13,32 +13,25 @@ class CategorySeeder extends Seeder
      *
      * @return void
      */
-    public function run()
-    {
-        $table = 'products_categories';
 
-        // if (Schema::hasTable($table)) {
-            DB::table($table)->insert([
-                [
-                    'title' => json_encode([
-                        'ru' => 'спецтехника'
-                    ]),
-                    'in_main' => 1
-                ],
-                [
-                    'title' => json_encode([
-                        'ru' => 'запчасти'
-                    ]),
-                    'in_main' => 1
-                ],
-                [
-                    'title' => json_encode([
-                        'ru' => 'Разработки',
-                        'en' => 'Developments'
-                    ]),
-                    'in_main' => 0
-                ]
-            ]);
-        // }
-    }
+//        $table = 'products_categories';
+//
+//        // if (Schema::hasTable($table)) {
+//            DB::table($table)->insert([
+//                [
+//                    'title' => json_encode([
+//                        'en' => 'one'
+//                    ]),
+//                    'slug' => "one"
+//                ],
+//                [
+//                    'title' => json_encode([
+//                        'en' => 'second'
+//                    ]),
+//                    'slug' => "second"
+//                ],
+//
+//            ]);
+//        // }
+//    }
 }

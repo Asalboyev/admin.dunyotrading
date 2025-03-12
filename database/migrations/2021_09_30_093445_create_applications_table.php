@@ -21,8 +21,11 @@ class CreateApplicationsTable extends Migration
             $table->text('phone_number')->nullable();
             $table->text('message')->nullable();
             $table->string('page')->nullable();
+            $table->unsignedBigInteger('product_id')->nullable(); // product_id qo'shildi
             $table->timestamps();
+//            $table->for .eign('product_id')->references('id')->on('products');
         });
+
     }
 
     /**

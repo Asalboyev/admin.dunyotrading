@@ -172,21 +172,6 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <div class="row">
-                                                <div class="col-2">
-                                                    <label for="info" class="form-label">Xapaктеристика</label>
-                                                </div>
-                                                <div class="col-10">
-                                                    <textarea name="info[{{ $lang->code }}]" id="info" cols="30" rows="10" class="form-control @error('info.'.$lang->code) is-invalid @enderror ckeditor" name="info[{{ $lang->code }}]" placeholder="Описание...">{{ old('info.'.$lang->code) }}</textarea>
-                                                    @error('info.'.$lang->code)
-                                                    <span class="invalid-feedback" role="alert">
-                                                        <strong>{{ $message }}</strong>
-                                                    </span>
-                                                    @enderror
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div>
                                     @endforeach
                                 </div>
@@ -255,7 +240,7 @@
                                         <div class="col-10">
                                             <select class="form-control @error('categories') is-invalid @enderror" data-choices='{"removeItemButton": true}' multiple name="categories[]">
                                                 @foreach ($all_categories as $key => $item)
-                                                <option value="{{ $item->id }}" style="margin-left: 12px" {{ (old('categories') ? in_array($item->id, old('categories')) : '') ? 'selected' : '' }}>{{ $item->title[$main_lang->code] }}</option>
+                                                <option value="{{ $item->id }}" style="margin-left: 12px" >{{ $item->title[$main_lang->code] }}</option>
                                                 @endforeach
                                             </select>
                                             @error('categories')

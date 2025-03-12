@@ -19,18 +19,57 @@ class ProductsCategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+//    public function index()
+//    {
+//        $categories = ProductsCategory::latest()
+//            ->paginate(12);
+//        $languages = Lang::all();
+//
+//        return view('app.products_categories.index', [
+//            'title' => $this->title,
+//            'route_name' => $this->route_name,
+//            'route_parameter' => $this->route_parameter,
+//            'categories' => $categories,
+//            'languages' => $languages
+//        ]);
+//    }
+
+
+    private function buildMenuTree($categories, $parentId = null)
     {
-        $categories = ProductsCategory::latest()
-            ->paginate(12);
+        $tree = [];
+
+        foreach ($categories->where('parent_id', $parentId) as $category) {
+            $tree[] = [
+                'menu' => $category,
+                'children' => $this->buildMenuTree($categories, $category->id), // Rekursiv chaqirish
+            ];
+        }
+
+        return $tree;
+    }
+
+    public function index(Request $request)
+    {
         $languages = Lang::all();
+        $search = $request->input('search');
+
+        // Barcha kategoriyalarni paginatsiya bilan olish
+        $allCategories = ProductsCategory::when($search, function ($query, $search) {
+            return $query->where('name', 'LIKE', '%' . $search . '%');
+        })->paginate(10); // Har sahifada 10 ta kategoriya chiqadi
+
+        // Daraxt strukturasini yaratish
+        $menuTree = $this->buildMenuTree(collect($allCategories->items())); // Paginated ma'lumotni collect() bilan array qilish
 
         return view('app.products_categories.index', [
             'title' => $this->title,
             'route_name' => $this->route_name,
             'route_parameter' => $this->route_parameter,
-            'categories' => $categories,
-            'languages' => $languages
+            'educational_programs' => $menuTree,
+            'languages' => $languages,
+            'count' => $allCategories, // Bu paginate bo‘lgani uchun links() ishlaydi
+            'search' => $search,
         ]);
     }
 

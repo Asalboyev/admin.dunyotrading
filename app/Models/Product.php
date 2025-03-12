@@ -34,6 +34,10 @@ class Product extends Model
     {
         return $this->belongsTo(Brand::class);
     }
+    public function application()
+    {
+        return $this->hasOne(Application::class, 'product_id');
+    }
 
     public function productsCategories()
     {
