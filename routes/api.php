@@ -33,7 +33,7 @@ Route::middleware('locale')->group(function () {
 
     Route::get('/categories', [ApiController::class, 'get_categories']);
     Route::get('/categories/{slug}', [ApiController::class, 'show_categories']);
-    Route::get('/categories/filter/{id}', [ApiController::class, 'show_categor_product']);
+    Route::get('/categories/filter/{slug}', [ApiController::class, 'show_categor_product']);
 
     Route::get('/products', [ApiController::class, 'get_products']);
     Route::get('/product/{slug}', [ApiController::class, 'show_products']);

@@ -86,7 +86,7 @@
         ]
         ])
     </div>
-</div> <!-- / .header -->
+</div>
 
 <!-- CARDS -->
 <div class="container-fluid">
@@ -131,7 +131,10 @@
                                     @endforeach
                                 </div>
                                 <div class="form-group">
-                                    <!-- Dropzone -->
+                                    <label for="title" class="form-label required">Url</label>
+                                    <input type="text" required class="form-control" name="url" value="{{ old('url') }}" id="title" placeholder="url...">
+                                </div>
+                                <div class="form-group">
                                     <label for="dropzone" class="form-label">Лого</label>
                                     <div class="dropzone dropzone-multiple" id="dropzone"></div>
                                 </div>

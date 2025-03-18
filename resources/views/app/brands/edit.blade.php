@@ -163,6 +163,10 @@
                                     @endforeach
                                 </div>
                                 <div class="form-group">
+                                    <label for="title" class="form-label required">Url</label>
+                                    <input type="text" required class="form-control" name="url" value="{{ old('url') ?? $brand->url }}" id="title" placeholder="url...">
+                                </div>
+                                <div class="form-group">
                                     <!-- Dropzone -->
                                     <label for="dropzone" class="form-label">Лого</label>
                                     <div class="dropzone dropzone-multiple" id="dropzone"></div>

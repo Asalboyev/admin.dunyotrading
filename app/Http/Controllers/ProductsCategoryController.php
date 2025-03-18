@@ -57,7 +57,7 @@ class ProductsCategoryController extends Controller
         // Barcha kategoriyalarni paginatsiya bilan olish
         $allCategories = ProductsCategory::when($search, function ($query, $search) {
             return $query->where('name', 'LIKE', '%' . $search . '%');
-        })->paginate(10); // Har sahifada 10 ta kategoriya chiqadi
+        })->paginate(100); // Har sahifada 10 ta kategoriya chiqadi
 
         // Daraxt strukturasini yaratish
         $menuTree = $this->buildMenuTree(collect($allCategories->items())); // Paginated ma'lumotni collect() bilan array qilish

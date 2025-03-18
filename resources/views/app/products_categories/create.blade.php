@@ -162,8 +162,8 @@
                                     <select class="form-select @error('parent_id') is-invalid @enderror" id="parent_id" name="parent_id" data-choices='{"hiddne": true}'>
                                         <option value="">Главная категория</option>
                                         @foreach ($all_categories as $category)
-                                            <option value="{{ $category->id }}" class="fw-bold" > {{ $category->title[$main_lang->code] }}</option>
                                         @if (!$category->parent_id) {{-- Faqat asosiy kategoriyalarni chiqarish 📂--}}
+                                            <option value="{{ $category->id }}" class="fw-bold" > {{ $category->title[$main_lang->code] }}</option>
                                             {{-- Pastdagi fayl ichiga o'tamiz --}}
                                             @include('app.products_categories.category-options', [
                                                 'categories' => $all_categories,

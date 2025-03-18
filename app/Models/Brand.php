@@ -12,7 +12,8 @@ class Brand extends Model
     protected $fillable = [
         'title',
         'img',
-        'desc'
+        'desc',
+        'url'
     ];
 
     protected $casts = [

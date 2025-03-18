@@ -35,7 +35,7 @@
     </script>
 
     <!-- Title -->
-    <title>Dashboard | NDC.uz</title>
+    <title>Dashboard</title>
 
     @yield('links')
 

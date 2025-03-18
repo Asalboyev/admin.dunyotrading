@@ -40,6 +40,7 @@ class ApiController extends Controller
                 'id' => $banner->id,
                 'title' => $banner->title[$locale] ?? null,
                 'desc' => $banner->desc[$locale] ?? null,
+                'url' => $banner->url[$locale] ?? null,
                 'images' => [
                     'lg' => $banner->lg_img, // Katta rasm uchun URL
                     'md' => $banner->md_img, // O‘rta rasm uchun URL
@@ -356,34 +357,26 @@ class ApiController extends Controller
             ], 404);
         }
 
-        // Kategoriyalarni map qilish (asosiy va farzand kategoriyalarni tarjimalar bilan)
-        $translatedPosts = collect($categories->items())->map(function ($category) use ($locale) {
+        // Rekursiv funksiya: barcha `children` larni chuqurlik bilan olish
+        $mapCategory = function ($category) use ($locale, &$mapCategory) {
             return [
                 'id' => $category->id,
                 'title' => $category->title[$locale] ?? null,
                 'desc' => $category->desc[$locale] ?? null,
-                'children' => $category->children->map(function ($child) use ($locale) {
-                    return [
-                        'id' => $child->id,
-                        'title' => $child->title[$locale] ?? null,
-                        'desc' => $child->desc[$locale] ?? null,
-                        'images' => [
-                            'lg' => $child->lg_img,
-                            'md' => $child->md_img,
-                            'sm' => $child->sm_img,
-                        ],
-                    ];
-                }),
                 'images' => [
-                    'lg' => $category->lg_img, // Katta rasm uchun URL
-                    'md' => $category->md_img, // O‘rta rasm uchun URL
-                    'sm' => $category->sm_img, // Kichik rasm uchun URL
+                    'lg' => $category->lg_img,
+                    'md' => $category->md_img,
+                    'sm' => $category->sm_img,
                 ],
                 'in_main' => $category->in_main,
                 'view' => $category->view,
                 'slug' => $category->slug,
+                'children' => $category->children->map(fn($child) => $mapCategory($child)), // Rekursiv chaqirish
             ];
-        });
+        };
+
+        // Asosiy kategoriyalarni map qilish
+        $translatedPosts = collect($categories->items())->map(fn($category) => $mapCategory($category));
 
         return response()->json([
             'data' => $translatedPosts,              // Tilga mos kategoriyalar
@@ -419,6 +412,9 @@ class ApiController extends Controller
                     'id' => $child->id,
                     'title' => $child->title[$locale] ?? null,
                     'desc' => $child->desc[$locale] ?? null,
+                    'first' => $child->first[$locale] ?? null,
+                    'second' => $child->second[$locale] ?? null,
+                    'third' => $child->third[$locale] ?? null,
                     'images' => [
                         'lg' => $child->lg_img, // Katta rasm URL
                         'md' => $child->md_img, // O'rta rasm URL
@@ -440,13 +436,15 @@ class ApiController extends Controller
         // Ma'lumotlarni JSON formatida qaytarish
         return response()->json($translatedCategory);
     }
-    public function show_categor_product($id)
+    public function  show_categor_product($slug)
     {
         // Foydalanuvchi tilini olish
         $locale = App::getLocale();
 
-        // Kategoriyani ID orqali topish
-        $category = ProductsCategory::with(['children', 'products.productImages'])->find($id);
+        // Kategoriyani slug orqali topish
+        $category = ProductsCategory::with(['children', 'products.productImages'])
+            ->where('slug', $slug)
+            ->first();
 
         // Agar kategoriya topilmasa, xato xabarini qaytarish
         if (is_null($category)) {
@@ -461,13 +459,18 @@ class ApiController extends Controller
             'id' => $category->id,
             'title' => $category->title[$locale] ?? null,
             'desc' => $category->desc[$locale] ?? null,
-            'info' => $category->info[$locale] ?? $category->info, //
-
+            'first' => $category->first[$locale] ?? null,
+            'second' => $category->second[$locale] ?? null,
+            'third' => $category->third[$locale] ?? null,
+            'info' => $category->info[$locale] ?? $category->info,
+            'slug' => $category->slug,
             'children' => $category->children->map(function ($child) use ($locale) {
                 return [
                     'id' => $child->id,
                     'title' => $child->title[$locale] ?? null,
                     'desc' => $child->desc[$locale] ?? null,
+
+                    'slug' => $child->slug,
                     'images' => [
                         'lg' => $child->lg_img,
                         'md' => $child->md_img,
