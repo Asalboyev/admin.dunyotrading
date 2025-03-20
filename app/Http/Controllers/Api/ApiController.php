@@ -40,7 +40,7 @@ class ApiController extends Controller
                 'id' => $banner->id,
                 'title' => $banner->title[$locale] ?? null,
                 'desc' => $banner->desc[$locale] ?? null,
-                'url' => $banner->url[$locale] ?? null,
+                'url' => $banner->url ?? null,
                 'images' => [
                     'lg' => $banner->lg_img, // Katta rasm uchun URL
                     'md' => $banner->md_img, // O‘rta rasm uchun URL
