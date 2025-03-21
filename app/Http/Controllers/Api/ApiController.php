@@ -586,26 +586,18 @@ class ApiController extends Controller
     {
         $locale = App::getLocale();
 
-        $product = Product::with(['productsCategories', 'productImages'])
-            ->where('slug', $slug)
-            ->first();
+        $product = Product::with(['productsCategories', 'productImages'])->where('slug', $slug)->first();
 
         if (!$product) {
             return response()->json(['message' => 'Product not found'], 404);
         }
 
-        // Hozirgi productga tegishli kategoriyalarni olish
-        $categoryIds = $product->productsCategories->pluck('id');
-
-        // Shu kategoriyalarga tegishli boshqa 4 ta productni olish
-        $relatedProducts = Product::with(['productImages'])
-            ->whereHas('productsCategories', function ($query) use ($categoryIds) {
-                $query->whereIn('id', $categoryIds);
-            })
-            ->where('id', '!=', $product->id) // Hozirgi productni chiqarib tashlash
-            ->inRandomOrder()
-            ->limit(4)
-            ->get();
+        // Shu productning categoriyalariga tegishli boshqa 4 ta productni olish
+        $relatedProducts = Product::whereHas('productsCategories', function ($query) use ($product) {
+            $query->whereIn('products_category_id', $product->productsCategories->pluck('id'));
+        })->where('id', '!=', $product->id) // Asosiy productni chiqarib tashlash
+        ->limit(4) // Faqat 4 ta product olish
+        ->get();
 
         return response()->json([
             'id' => $product->id,
@@ -634,9 +626,8 @@ class ApiController extends Controller
                 return [
                     'id' => $related->id,
                     'title' => $related->title[$locale] ?? $related->title,
-                    'description' => $related->desc[$locale] ?? $related->desc,
-                    'stock' => $related->stock,
                     'slug' => $related->slug,
+                    'stock' => $related->stock,
                     'images' => $related->productImages->map(function ($image) {
                         return [
                             'lg' => $image->lg_img,
