@@ -452,7 +452,7 @@ class ApiController extends Controller
         }
 
         // Mahsulotlarni 12 ta qilib paginate qilish
-        $paginatedProducts = $category->products()->with('productImages')->paginate(12);
+        $paginatedProducts = $category->products()->with('productImages')->paginate();
 
         // Kategoriya ma'lumotlarini foydalanuvchi tiliga moslashtirish
         $translatedCategory = [
