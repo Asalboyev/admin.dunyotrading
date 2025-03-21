@@ -586,18 +586,32 @@ class ApiController extends Controller
     {
         $locale = App::getLocale();
 
-        $product = Product::with(['productsCategories', 'productImages'])->where('slug', $slug)->first();
+        $product = Product::with(['productsCategories', 'productImages'])
+            ->where('slug', $slug)
+            ->first();
 
         if (!$product) {
             return response()->json(['message' => 'Product not found'], 404);
         }
 
+        // Hozirgi productga tegishli kategoriyalarni olish
+        $categoryIds = $product->productsCategories->pluck('id');
+
+        // Shu kategoriyalarga tegishli boshqa 4 ta productni olish
+        $relatedProducts = Product::with(['productImages'])
+            ->whereHas('productsCategories', function ($query) use ($categoryIds) {
+                $query->whereIn('id', $categoryIds);
+            })
+            ->where('id', '!=', $product->id) // Hozirgi productni chiqarib tashlash
+            ->inRandomOrder()
+            ->limit(4)
+            ->get();
+
         return response()->json([
             'id' => $product->id,
             'title' => $product->title[$locale] ?? $product->title,
             'description' => $product->desc[$locale] ?? $product->desc,
-            'info' => $product->info[$locale] ?? $product->info, //
-
+            'info' => $product->info[$locale] ?? $product->info,
             'stock' => $product->stock,
             'images' => $product->productImages->map(function ($image) {
                 return [
@@ -616,6 +630,22 @@ class ApiController extends Controller
             'slug' => $product->slug,
             'meta_keywords' => $product->meta_keywords[$locale] ?? $product->meta_keywords,
             'meta_desc' => $product->meta_desc[$locale] ?? $product->meta_desc,
+            'related_products' => $relatedProducts->map(function ($related) use ($locale) {
+                return [
+                    'id' => $related->id,
+                    'title' => $related->title[$locale] ?? $related->title,
+                    'description' => $related->desc[$locale] ?? $related->desc,
+                    'stock' => $related->stock,
+                    'slug' => $related->slug,
+                    'images' => $related->productImages->map(function ($image) {
+                        return [
+                            'lg' => $image->lg_img,
+                            'md' => $image->md_img,
+                            'sm' => $image->sm_img,
+                        ];
+                    }),
+                ];
+            }),
         ]);
     }
 
